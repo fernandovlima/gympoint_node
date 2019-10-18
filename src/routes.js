@@ -9,10 +9,10 @@ const routes = new Router();
 routes.post('/users', UserController.store);
 
 routes.post('/sessions', SessionController.store);
-routes.put('/students', StudentsController.store);
 
 // middleware de auth apenas para as rotas abaixo de onde esta declarado.
 routes.use(authMiddleware);
 routes.put('/users', UserController.update);
+routes.put('/students', StudentsController.store);
 
 export default routes;
