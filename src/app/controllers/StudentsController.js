@@ -59,7 +59,7 @@ class StudentsController {
       return res.status(400).json({ error: 'Student does not exists !' });
     }
     // update student
-    const { name, email, age, weight, height } = await Students.update(
+    const { name, email, age, weight, height } = await studentExists.update(
       req.body
     );
 
