@@ -13,6 +13,7 @@ routes.post('/sessions', SessionController.store);
 // middleware de auth apenas para as rotas abaixo de onde esta declarado.
 routes.use(authMiddleware);
 routes.put('/users', UserController.update);
-routes.put('/students', StudentsController.store);
+routes.post('/students', StudentsController.store);
+routes.put('/students', StudentsController.update);
 
 export default routes;

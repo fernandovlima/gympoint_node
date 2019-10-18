@@ -58,7 +58,7 @@ class StudentsController {
     if (!studentExists) {
       return res.status(400).json({ error: 'Student does not exists !' });
     }
-
+    // update student
     const { name, email, age, weight, height } = await Students.update(
       req.body
     );
