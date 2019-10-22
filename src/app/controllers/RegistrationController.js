@@ -34,6 +34,10 @@ class RegistrationController {
     }
     // Find Plan
     const plan = await Plan.findByPk(plan_id);
+    // Check se Plan existe
+    if (!plan) {
+      return res.status(401).json({ error: 'Plan does not exists' });
+    }
 
     const hourStart = startOfHour(parseISO(start_date));
     const endDate = addMonths(parseISO(start_date), plan.duration);
