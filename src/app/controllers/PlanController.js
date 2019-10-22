@@ -29,14 +29,17 @@ class PlanController {
       return res.status(401).json({ error: 'Plan already exists' });
     }
     // create plan
-    const { id, title, duration, price } = await Plan.create(req.body);
-
-    return res.json({
-      id,
-      title,
-      duration,
-      price,
-    });
+    try {
+      const { id, title, duration, price } = await Plan.create(req.body);
+      return res.json({
+        id,
+        title,
+        duration,
+        price,
+      });
+    } catch (error) {
+      return res.json(error);
+    }
   }
 
   async update(req, res) {
@@ -76,9 +79,7 @@ class PlanController {
 
     await plan.destroy();
 
-    return res.json({
-      message: `Plan ${plan.title.toUpperCase()} was deleted`,
-    });
+    return res.send();
   }
 }
 
