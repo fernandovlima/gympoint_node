@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import { addMonths, parseISO, startOfHour } from 'date-fns';
 import Registration from '../models/Registration';
 import Plan from '../models/Plan';
-import Students from '../models/Students';
+import Student from '../models/Student';
 
 class RegistrationController {
   async index(req, res) {
@@ -27,7 +27,7 @@ class RegistrationController {
       return res.status(401).json({ error: 'Registration already exists' });
     }
     // busca se existe um Student cadastrada
-    const student = await Students.findByPk(student_id);
+    const student = await Student.findByPk(student_id);
     // check se Registrations já existe
     if (!student) {
       return res.status(401).json({ error: 'Student does not exists' });

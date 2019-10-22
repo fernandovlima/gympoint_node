@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
-import Students from '../models/Students';
+import Students from '../models/Student';
 
-class StudentsController {
+class StudentController {
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
@@ -73,4 +73,4 @@ class StudentsController {
   }
 }
 
-export default new StudentsController();
+export default new StudentController();
