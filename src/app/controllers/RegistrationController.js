@@ -4,6 +4,8 @@ import Registration from '../models/Registration';
 import Plan from '../models/Plan';
 import Student from '../models/Student';
 
+import Mail from '../../lib/Mail';
+
 class RegistrationController {
   async index(req, res) {
     const registrations = await Registration.findAll({
@@ -65,6 +67,13 @@ class RegistrationController {
       student_id,
       plan_id,
       price: finalPrice,
+    });
+
+    await Mail.sendMail({
+      to: `${student.name} <${student.email}> `,
+      subject: 'Bem vindo ao Gympoit',
+      text: `${student.name} bem vindo ao Gympoint. Você se matriculou no plano ${plan.title}
+      no valor de ${plan.price}`,
     });
 
     return res.json(registrations);
