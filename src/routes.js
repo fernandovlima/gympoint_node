@@ -29,7 +29,7 @@ routes.delete('/plans/:planId', PlanController.delete);
 
 // registrations
 routes.get('/registrations', RegistrationController.index);
-routes.post('/registrations/', RegistrationController.store);
+routes.post('/registrations', RegistrationController.store);
 routes.put('/registrations/:registrationId', RegistrationController.update);
 routes.delete('/registrations/:registrationId', RegistrationController.delete);
 

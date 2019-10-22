@@ -6,7 +6,23 @@ import Student from '../models/Student';
 
 class RegistrationController {
   async index(req, res) {
-    return res.json();
+    const registrations = await Registration.findAll({
+      include: [
+        {
+          model: Student,
+          as: 'student',
+          attributes: ['name', 'email'],
+        },
+        {
+          model: Plan,
+          as: 'plan',
+          attributes: ['title', 'price'],
+        },
+      ],
+      order: ['start_date'],
+    });
+
+    return res.json(registrations);
   }
 
   async store(req, res) {
@@ -55,7 +71,43 @@ class RegistrationController {
   }
 
   async update(req, res) {
-    return res.json({ ok: true });
+    const schema = Yup.object().shape({
+      start_date: Yup.date().required(),
+      plan_id: Yup.number().required(),
+    });
+    // valida se o schema está preenchido corretamente
+    if (!(await schema.isValid(req.body))) {
+      return res.status(401).json({ error: 'Fields validation fails' });
+    }
+
+    const { registrationId } = req.params;
+    // busca se existe uma registration cadastrada
+    const registration = await Registration.findByPk(registrationId);
+
+    if (!registration) {
+      return res.status(401).json({ error: 'Registration does not exists' });
+    }
+
+    const { plan_id, start_date } = req.body;
+    // Find Plan
+    const plan = await Plan.findByPk(plan_id);
+    // Check se Plan existe
+    if (!plan) {
+      return res.status(401).json({ error: 'Plan does not exists' });
+    }
+
+    const hourStart = startOfHour(parseISO(start_date));
+    const endDate = addMonths(parseISO(start_date), plan.duration);
+    const finalPrice = plan.duration * plan.price;
+
+    const registrations = await registration.update({
+      start_date: hourStart,
+      end_date: endDate,
+      plan_id,
+      price: finalPrice,
+    });
+
+    return res.json(registrations);
   }
 
   async delete(req, res) {
