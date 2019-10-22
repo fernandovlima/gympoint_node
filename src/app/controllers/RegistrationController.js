@@ -59,8 +59,15 @@ class RegistrationController {
   }
 
   async delete(req, res) {
+    const { registrationId } = req.params;
+    const registration = await Registration.findByPk(registrationId);
+    if (!registration) {
+      return res.status(401).json({ error: 'Registration does not exists' });
+    }
+
+    await registration.destroy();
     return res.json({
-      message: 'ok',
+      message: `Registration ${registrationId} was deleted`,
     });
   }
 }
