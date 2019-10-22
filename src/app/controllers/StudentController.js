@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import Students from '../models/Student';
+import Student from '../models/Student';
 
 class StudentController {
   async store(req, res) {
@@ -16,7 +16,7 @@ class StudentController {
       return res.status(401).json({ error: 'Validation fails' });
     }
     // procura se student ja existe
-    const studentExists = await Students.findOne({
+    const studentExists = await Student.findOne({
       where: { email: req.body.email },
     });
 
@@ -25,9 +25,7 @@ class StudentController {
     }
 
     // criação de student
-    const { name, email, age, weight, height } = await Students.create(
-      req.body
-    );
+    const { name, email, age, weight, height } = await Student.create(req.body);
 
     return res.json({
       name,
@@ -51,7 +49,7 @@ class StudentController {
       return res.status(401).json({ error: 'Validation fails' });
     }
 
-    const studentExists = await Students.findOne({
+    const studentExists = await Student.findOne({
       where: { email: req.body.email },
     });
 

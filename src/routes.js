@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
-import StudentsController from './app/controllers/StudentsController';
+import StudentController from './app/controllers/StudentController';
 import PlanController from './app/controllers/PlanController';
 import RegistrationController from './app/controllers/RegistrationController';
 
@@ -18,8 +18,8 @@ routes.post('/sessions', SessionController.store);
 routes.use(authMiddleware);
 routes.put('/users', UserController.update);
 
-routes.post('/students', StudentsController.store);
-routes.put('/students', StudentsController.update);
+routes.post('/students', StudentController.store);
+routes.put('/students', StudentController.update);
 
 // plans
 routes.get('/plans', PlanController.index);
