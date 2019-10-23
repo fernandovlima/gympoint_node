@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
-import { addMonths, parseISO, startOfHour } from 'date-fns';
+import { addMonths, parseISO, startOfHour, format } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 import Registration from '../models/Registration';
 import Plan from '../models/Plan';
 import Student from '../models/Student';
@@ -61,22 +62,33 @@ class RegistrationController {
     const endDate = addMonths(parseISO(start_date), plan.duration);
     const finalPrice = plan.duration * plan.price;
 
-    const registrations = await Registration.create({
-      start_date: hourStart,
-      end_date: endDate,
-      student_id,
-      plan_id,
-      price: finalPrice,
-    });
+    try {
+      const registrations = await Registration.create({
+        start_date: hourStart,
+        end_date: endDate,
+        student_id,
+        plan_id,
+        price: finalPrice,
+      });
 
-    await Mail.sendMail({
-      to: `${student.name} <${student.email}> `,
-      subject: 'Bem vindo ao Gympoit',
-      text: `${student.name} bem vindo ao Gympoint. Você se matriculou no plano ${plan.title}
-      no valor de ${plan.price}`,
-    });
+      await Mail.sendMail({
+        to: `${student.name} <${student.email}> `,
+        subject: 'Bem vindo ao Gympoit',
+        template: 'registration',
+        context: {
+          student: student.name,
+          plan: plan.title,
+          price: plan.price,
+          date: format(endDate, "'dia' dd 'de' MMMM', às' H:mm'h'", {
+            locale: pt,
+          }),
+        },
+      });
 
-    return res.json(registrations);
+      return res.json(registrations);
+    } catch (error) {
+      return res.json(error);
+    }
   }
 
   async update(req, res) {
