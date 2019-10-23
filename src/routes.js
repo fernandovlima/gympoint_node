@@ -48,6 +48,6 @@ routes.put('/registrations/:registrationId', RegistrationController.update);
 routes.delete('/registrations/:registrationId', RegistrationController.delete);
 
 // help order answer
-routes.post('/help-orders/:helpId/answer', HelpOrdersUnanswered.store);
+routes.post('/help-orders/:helpId/answer', HelpOrdersUnanswered.update);
 
 export default routes;
