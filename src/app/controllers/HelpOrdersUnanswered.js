@@ -1,11 +1,10 @@
 import * as Yup from 'yup';
-import { format, parseISO } from 'date-fns';
-import pt from 'date-fns/locale/pt';
 
 import HelpOrder from '../models/HelpOrder';
 import Student from '../models/Student';
 
-import Mail from '../../lib/Mail';
+import HelpOrderAnswerMail from '../jobs/HelpOrderAnswerMail';
+import Queue from '../../lib/Queue';
 
 class HelpOrdersUnanswered {
   async index(req, res) {
@@ -54,18 +53,9 @@ class HelpOrdersUnanswered {
         answer_at: new Date(),
       });
 
-      await Mail.sendMail({
-        to: `${helpOrderAnswered.student.name} <${helpOrderAnswered.student.email}> `,
-        subject: 'Resposta de auxílio',
-        template: 'helpAnswered',
-        context: {
-          student: helpOrderAnswered.student.name,
-          question: helpOrderAnswered.question,
-          answer: helpOrderAnswered.answer,
-          answer_at: helpOrderAnswered.answer_at,
-        },
+      await Queue.add(HelpOrderAnswerMail.key, {
+        helpOrderAnswered,
       });
-
       return res.json(helpOrderAnswered);
     } catch (error) {
       return res.json(error);
