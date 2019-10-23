@@ -6,6 +6,8 @@ import StudentController from './app/controllers/StudentController';
 import PlanController from './app/controllers/PlanController';
 import RegistrationController from './app/controllers/RegistrationController';
 import CheckinController from './app/controllers/CheckinController';
+import HelpOrderController from './app/controllers/HelpOrderController';
+import HelpOrdersUnanswered from './app/controllers/HelpOrdersUnanswered';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -18,6 +20,14 @@ routes.post('/sessions', SessionController.store);
 // checkin
 routes.get('/students/:studentId/checkin', CheckinController.index);
 routes.post('/students/:studentId/checkin', CheckinController.store);
+
+// help orders
+routes.get('/students/:studentId/help-orders/', HelpOrderController.index);
+routes.post('/students/:studentId/help-orders/', HelpOrderController.store);
+// help order answer
+routes.put('/help-orders/:helpId/answer', HelpOrderController.update);
+// help onders unanswered
+routes.get('/help-orders/unanswered', HelpOrdersUnanswered.index);
 
 // middleware de auth apenas para as rotas abaixo de onde esta declarado.
 routes.use(authMiddleware);

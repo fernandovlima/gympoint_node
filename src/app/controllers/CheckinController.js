@@ -52,7 +52,7 @@ class CheckinController {
 
       return res.json(checkins);
     } catch (error) {
-      res.json(error);
+      return res.json(error);
     }
   }
 }
