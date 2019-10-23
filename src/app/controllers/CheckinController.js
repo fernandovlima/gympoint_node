@@ -1,18 +1,59 @@
+import { subDays } from 'date-fns';
+import Op from 'sequelize';
+
+import Checkin from '../models/Ckeckin';
+import Student from '../models/Student';
+
 class CheckinController {
   async index(req, res) {
-    return res.json({ ok: 'index' });
+    const { studentId } = req.params;
+    const checkins = await Checkin.findAll({
+      where: {
+        student_id: studentId,
+      },
+      order: ['created_at'],
+      include: [
+        {
+          model: Student,
+          as: 'student',
+          attibutes: ['name', 'email'],
+        },
+      ],
+    });
+    return res.json(checkins);
   }
 
   async store(req, res) {
-    return res.json({ ok: 'store' });
-  }
+    const { studentId } = req.params;
 
-  async update(req, res) {
-    return res.json({ ok: 'update' });
-  }
+    const checkinExists = await Checkin.findOne({
+      where: {
+        student_id: studentId,
+        created_at: new Date(),
+      },
+    });
 
-  async delete(req, res) {
-    return res.json({ ok: 'delete' });
+    if (checkinExists) {
+      return res.status(401).json({ error: 'Checkin already done' });
+    }
+
+    try {
+      const pastDays = subDays(new Date(), 7);
+      const verifyCheckins = await Checkin.findAll({
+        where: {
+          student_id: studentId,
+          created_at: { [Op.between]: [pastDays, new Date()] },
+        },
+      });
+
+      const checkins = await Checkin.create({
+        student_id: studentId,
+      });
+
+      return res.json(checkins);
+    } catch (error) {
+      res.json(error);
+    }
   }
 }
 

@@ -15,6 +15,10 @@ routes.post('/users', UserController.store);
 
 routes.post('/sessions', SessionController.store);
 
+// checkin
+routes.get('/students/:studentId/checkin', CheckinController.index);
+routes.post('/students/:studentId/checkin', CheckinController.store);
+
 // middleware de auth apenas para as rotas abaixo de onde esta declarado.
 routes.use(authMiddleware);
 routes.put('/users', UserController.update);
@@ -33,9 +37,5 @@ routes.get('/registrations', RegistrationController.index);
 routes.post('/registrations', RegistrationController.store);
 routes.put('/registrations/:registrationId', RegistrationController.update);
 routes.delete('/registrations/:registrationId', RegistrationController.delete);
-
-// checkin
-routes.get('/students/:studentId/checkin', CheckinController.index);
-routes.post('students/:studentId/checkin', CheckinController.index);
 
 export default routes;
