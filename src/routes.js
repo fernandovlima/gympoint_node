@@ -24,8 +24,7 @@ routes.post('/students/:studentId/checkin', CheckinController.store);
 // help orders
 routes.get('/students/:studentId/help-orders/', HelpOrderController.index);
 routes.post('/students/:studentId/help-orders/', HelpOrderController.store);
-// help order answer
-routes.put('/help-orders/:helpId/answer', HelpOrderController.update);
+
 // help onders unanswered
 routes.get('/help-orders/unanswered', HelpOrdersUnanswered.index);
 
@@ -47,5 +46,8 @@ routes.get('/registrations', RegistrationController.index);
 routes.post('/registrations', RegistrationController.store);
 routes.put('/registrations/:registrationId', RegistrationController.update);
 routes.delete('/registrations/:registrationId', RegistrationController.delete);
+
+// help order answer
+routes.post('/help-orders/:helpId/answer', HelpOrdersUnanswered.store);
 
 export default routes;
